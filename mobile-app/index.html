@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>IoT MVP Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #212121;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .live-indicator {
+            background: #4caf50;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .content {
+            padding: 16px;
+            max-width: 100%;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .overview-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .overview-card.co2 { background: #e3f2fd; }
+        .overview-card.temp { background: #ffebee; }
+        .overview-card.humidity { background: #e1f5fe; }
+        .overview-card.occupancy { background: #fce4ec; }
+
+        .overview-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .overview-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .overview-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            margin-top: 4px;
+        }
+
+        .badge.good { background: #4caf50; }
+        .badge.warning { background: #ff9800; }
+        .badge.error { background: #f44336; }
+        .badge.gray { background: #9e9e9e; }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0 12px;
+        }
+
+        .device-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .device-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .device-name {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .metric-value {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .metric-badge {
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .device-timestamp {
+            font-size: 11px;
+            color: #999;
+            margin-top: 8px;
+            text-align: right;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .footer-subtext {
+            font-size: 10px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        /* Pull to refresh indicator */
+        .refresh-indicator {
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-size: 14px;
+            color: #1976d2;
+            display: none;
+            z-index: 1000;
+        }
+
+        .refresh-indicator.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Refresh Indicator -->
+    <div class="refresh-indicator" id="refreshIndicator">Refreshing...</div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <span style="font-size: 28px;">☁️</span>
+            <span class="header-title">IoT MVP Mobile</span>
+        </div>
+        <div class="live-indicator">
+            <div class="live-dot"></div>
+            <span>Live</span>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Overview Cards -->
+        <div class="overview-grid">
+            <div class="overview-card co2">
+                <div class="overview-icon">☁️</div>
+                <div class="overview-value" id="avgCO2">-</div>
+                <div class="overview-label">ppm CO₂</div>
+                <div class="badge" id="co2Badge">-</div>
+            </div>
+
+            <div class="overview-card temp">
+                <div class="overview-icon">🌡️</div>
+                <div class="overview-value" id="avgTemp">-</div>
+                <div class="overview-label">Temperature</div>
+                <div class="badge gray">Comfortable</div>
+            </div>
+
+            <div class="overview-card humidity">
+                <div class="overview-icon">💧</div>
+                <div class="overview-value" id="avgHumidity">-</div>
+                <div class="overview-label">Humidity</div>
+                <div class="badge gray">Optimal</div>
+            </div>
+
+            <div class="overview-card occupancy">
+                <div class="overview-icon">👥</div>
+                <div class="overview-value" id="occupancyCount">-</div>
+                <div class="overview-label">Occupied</div>
+                <div class="badge gray">Active spaces</div>
+            </div>
+        </div>
+
+        <!-- Devices Section -->
+        <div class="section-title">All Devices</div>
+        <div id="deviceList"></div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div>IoT MVP v1.0.0</div>
+            <div class="footer-subtext" id="footerStats">Monitoring 3 devices • 18.2% energy savings</div>
+        </div>
+    </div>
+
+    <script>
+        // Mock device data
+        const mockDevices = [
+            {
+                id: 'device-001',
+                name: 'Conference Room A',
+                co2: 680,
+                temperature: 22.5,
+                humidity: 45.2,
+                occupancy: true,
+                battery: 3250,
+            },
+            {
+                id: 'device-002',
+                name: 'Office Wing B',
+                co2: 520,
+                temperature: 21.8,
+                humidity: 42.1,
+                occupancy: false,
+                battery: 3100,
+            },
+            {
+                id: 'device-003',
+                name: 'Meeting Room C',
+                co2: 1150,
+                temperature: 24.2,
+                humidity: 48.5,
+                occupancy: true,
+                battery: 2980,
+            },
+        ];
+
+        function getCO2Status(co2) {
+            if (co2 < 800) return { label: 'Good', class: 'good' };
+            if (co2 < 1000) return { label: 'Moderate', class: 'warning' };
+            return { label: 'Poor', class: 'error' };
+        }
+
+        function getBatteryStatus(voltage) {
+            if (voltage > 3000) return { label: 'Good', class: 'good' };
+            if (voltage > 2600) return { label: 'Low', class: 'warning' };
+            return { label: 'Critical', class: 'error' };
+        }
+
+        function updateOverview() {
+            const avgCO2 = Math.round(mockDevices.reduce((acc, d) => acc + d.co2, 0) / mockDevices.length);
+            const avgTemp = (mockDevices.reduce((acc, d) => acc + d.temperature, 0) / mockDevices.length).toFixed(1);
+            const avgHumidity = (mockDevices.reduce((acc, d) => acc + d.humidity, 0) / mockDevices.length).toFixed(1);
+            const occupiedCount = mockDevices.filter(d => d.occupancy).length;
+
+            document.getElementById('avgCO2').textContent = avgCO2;
+            document.getElementById('avgTemp').textContent = avgTemp + '°C';
+            document.getElementById('avgHumidity').textContent = avgHumidity + '%';
+            document.getElementById('occupancyCount').textContent = `${occupiedCount}/${mockDevices.length}`;
+
+            const co2Status = getCO2Status(avgCO2);
+            const co2Badge = document.getElementById('co2Badge');
+            co2Badge.textContent = co2Status.label;
+            co2Badge.className = `badge ${co2Status.class}`;
+
+            document.getElementById('footerStats').textContent = 
+                `Monitoring ${mockDevices.length} devices • 18.2% energy savings`;
+        }
+
+        function renderDevices() {
+            const deviceList = document.getElementById('deviceList');
+            deviceList.innerHTML = mockDevices.map(device => {
+                const co2Status = getCO2Status(device.co2);
+                const batteryStatus = getBatteryStatus(device.battery);
+                const now = new Date().toLocaleTimeString();
+
+                return `
+                    <div class="device-card">
+                        <div class="device-header">
+                            <div class="device-name">${device.name}</div>
+                            <div class="badge ${device.occupancy ? '' : 'gray'}">
+                                ${device.occupancy ? 'Occupied' : 'Vacant'}
+                            </div>
+                        </div>
+                        <div class="device-metrics">
+                            <div class="metric-row">
+                                <div class="metric-label">CO₂</div>
+                                <div class="metric-value">
+                                    ${device.co2} ppm
+                                    <span class="metric-badge ${co2Status.class}">${co2Status.label}</span>
+                                </div>
+                            </div>
+                            <div class="metric-row">
+                                <div class="metric-label">Temperature</div>
+                                <div class="metric-value">${device.temperature}°C</div>
+                            </div>
+                            <div class="metric-row">
+                                <div class="metric-label">Humidity</div>
+                                <div class="metric-value">${device.humidity}%</div>
+                            </div>
+                            <div class="metric-row">
+                                <div class="metric-label">🔋 Battery</div>
+                                <div class="metric-value">
+                                    ${device.battery} mV
+                                    <span class="metric-badge ${batteryStatus.class}">${batteryStatus.label}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="device-timestamp">Last update: ${now}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function refresh() {
+            const indicator = document.getElementById('refreshIndicator');
+            indicator.classList.add('show');
+
+            // Simulate small data changes
+            mockDevices.forEach(device => {
+                device.co2 += Math.floor(Math.random() * 20) - 10;
+                device.temperature += (Math.random() - 0.5) * 0.5;
+                device.humidity += (Math.random() - 0.5);
+                device.battery -= Math.floor(Math.random() * 5);
+            });
+
+            updateOverview();
+            renderDevices();
+
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 1000);
+        }
+
+        // Pull to refresh functionality
+        let startY = 0;
+        let currentY = 0;
+        let pulling = false;
+
+        document.addEventListener('touchstart', (e) => {
+            if (window.scrollY === 0) {
+                startY = e.touches[0].pageY;
+                pulling = true;
+            }
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (pulling) {
+                currentY = e.touches[0].pageY;
+                if (currentY - startY > 100) {
+                    pulling = false;
+                    refresh();
+                }
+            }
+        });
+
+        document.addEventListener('touchend', () => {
+            pulling = false;
+        });
+
+        // Initial render
+        updateOverview();
+        renderDevices();
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            refresh();
+        }, 30000);
+    </script>
+</body>
+</html>
