@@ -1,43 +1,65 @@
- IoT MVP: Smart Building Air Quality and Occupancy Monitoring System
+ IoT MVP for Smart Building
 
  Project Overview
 
-This repository contains complete technical documentation (100,000+ words) and full source code implementation for a research-led IoT minimum viable product (MVP). The system monitors air quality (CO₂, temperature, humidity) and occupancy in commercial office buildings using battery-powered sensors, BLE/MQTT communication, and AWS cloud infrastructure.
+A complete end-to-end IoT system for monitoring indoor air quality and occupancy in smart buildings. This project combines comprehensive technical documentation (100,000+ words) with production-ready source code implementation. The system monitors CO2 levels, temperature, humidity, and occupancy across multiple rooms to optimize HVAC systems and improve indoor environmental quality.
 
-Key Achievements: 
-- ⚡ 2.4-year battery lifetime on 3× AA lithium batteries (validated)
-- 💰 £35 device BOM (£15 under £50 target)
-- 📊 18.2% HVAC energy savings (4-week pilot, 10 devices)
-- ☁️ £22/year cloud costs for 20 devices (96% under budget)
-- 🔒 Zero P0/P1 security vulnerabilities (penetration tested)
-- 🌱 Carbon-positive in 6 months (7.17 kg CO₂e saved over lifetime)
+ Key Achievements
+- 2.4-year battery lifetime on 3× AA lithium batteries (validated)
+- £35 device BOM (£15 under £50 target)
+- 18.2% HVAC energy savings (4-week pilot, 10 devices)
+- £22/year cloud costs for 20 devices (96% under budget)
+- Zero P0/P1 security vulnerabilities (penetration tested)
+- Carbon-positive in 6 months (7.17 kg CO2e saved over lifetime)
 
 ---
 
- 🚀 NEW: Full Implementation Code
+ Full Implementation
 
-In addition to comprehensive documentation, this repository now includes production-ready source code:
+This repository includes production-ready source code across all system layers:
 
-- ✅ Firmware (`firmware/`): STM32WB55 embedded C with FreeRTOS, BLE 5.2, secure OTA
-- ✅ Gateway (`gateway/`): Raspberry Pi Python BLE-to-MQTT bridge with local buffering
-- ✅ Cloud (`cloud/`): AWS Terraform IaC (IoT Core, Timestream, Lambda, API Gateway, Cognito)
-- ✅ Web Dashboard (`web-dashboard/`): React TypeScript with Material-UI (package.json ready)
-- ✅ Mobile App (`mobile-app/`): React Native for iOS/Android (package.json ready)
-- ✅ CI/CD (`.github/workflows/`): GitHub Actions pipelines for automated deployment
+- Firmware ([firmware/](firmware/)): STM32WB55 embedded C with FreeRTOS, BLE 5.2, secure OTA
+- Gateway ([gateway/](gateway/)): Raspberry Pi Python BLE-to-MQTT bridge with local buffering
+- Cloud ([cloud/](cloud/)): AWS Terraform IaC (IoT Core, Timestream, Lambda, API Gateway, Cognito)
+- Web Dashboard ([web-dashboard/](web-dashboard/)): React TypeScript with Material-UI and Recharts
+- Mobile App ([mobile-app/](mobile-app/)): Responsive HTML/CSS/JavaScript mobile web app
+- CI/CD ([.github/workflows/](.github/workflows/)): GitHub Actions pipelines for automated deployment
+- Scripts ([scripts/](scripts/)): PowerShell automation for setup, build, deploy, and testing
 
-📖 See [README_IMPLEMENTATION.md](README_IMPLEMENTATION.md) for complete implementation guide
+See [README_IMPLEMENTATION.md](README_IMPLEMENTATION.md) for complete implementation guide
 
 ---
 
  Quick Start
 
+ For Assessors/Reviewers
 | Goal | Start here |
 |------|------------|
-| Submit assessment | [report/final_report.md](report/final_report.md) → [report/README.md](report/README.md) |
-| Understand system | [README](README.md) (this file) → [design/requirements/use_case_and_constraints.md](design/requirements/use_case_and_constraints.md) → [design/architecture/](design/architecture/) |
-| Find by topic | [INDEX.md](INDEX.md) (alphabetical, topical, keyword, role-based) |
-| Look up terms | [GLOSSARY.md](GLOSSARY.md) (BLE, MQTT, OTA, HVAC, IAQ, etc.) |
-| Step-by-step paths | [QUICKSTART.md](QUICKSTART.md) (assessor, implementer, by role) |
+| Final Report | [report/final_report.md](report/final_report.md) - 1,500-word academic report |
+| System Overview | This README + [design/requirements/use_case_and_constraints.md](design/requirements/use_case_and_constraints.md) |
+| Architecture | [design/architecture/](design/architecture/) - All system layers |
+| Implementation | [README_IMPLEMENTATION.md](README_IMPLEMENTATION.md) - Complete code guide |
+
+ For Developers
+```powershell
+ Setup development environment
+.\scripts\setup-dev-environment.ps1
+
+ Start development servers (web dashboard + mobile app)
+.\scripts\start-local-dev.ps1
+
+ Build all components for production
+.\scripts\build-all.ps1
+
+ Deploy AWS infrastructure
+.\scripts\deploy-cloud.ps1
+```
+
+ Quick Navigation
+- [INDEX.md](INDEX.md) - Alphabetical and topical document index
+- [GLOSSARY.md](GLOSSARY.md) - Technical terms and acronyms
+- [QUICKSTART.md](QUICKSTART.md) - 15-minute guided tours by role
+- [CHANGELOG.md](CHANGELOG.md) - Version history
 
 ---
 
@@ -45,58 +67,175 @@ In addition to comprehensive documentation, this repository now includes product
 
 ```
 iot_mvp/
-├── 📄 DOCUMENTATION (100,000+ words)
-│   ├── README.md                       This file - project overview with implementation
-│   ├── README_IMPLEMENTATION.md        Complete implementation guide
-│   ├── QUICKSTART.md                   15-minute quick start
+├── DOCUMENTATION (100,000+ words)
+│   ├── README.md                       Project overview with implementation
+│   ├── README_IMPLEMENTATION.md        Complete implementation guide  
+│   ├── QUICKSTART.md                   15-minute quick start guides
 │   ├── INDEX.md                        Document index (alphabetical, topical)
 │   ├── GLOSSARY.md                     Technical terms and acronyms
 │   ├── CHANGELOG.md                    Version history
+│   ├── DEPLOYMENT_GUIDE.md             Production deployment instructions
 │   ├── PROJECT_STRUCTURE.md            Directory tree and navigation
+│   │
 │   ├── report/                          Final deliverables
-│   │   └── final_report.md             1,500-word academic report (SUBMIT THIS)
+│   │   ├── final_report.md             1,500-word academic report (SUBMIT)
+│   │   └── README.md                   Report overview
+│   │
 │   ├── design/                          Technical design documentation
 │   │   ├── requirements/               Phase 1: Requirements analysis
 │   │   ├── architecture/               Phase 2: System architecture
 │   │   └── implementation/             Phase 3: Implementation details
+│   │
 │   ├── testing/                         Test plans and results
-│   │   └── test_plan.md                92 tests, 98% pass rate
+│   │   ├── test_plan.md                92 tests, 98% pass rate
+│   │   └── README.md                   Testing overview
+│   │
 │   └── appendices/                      Deep technical appendices (55,000 words)
-│       ├── power_budget.md             18,500 words - battery lifetime
-│       ├── mqtt_schema.md              12,000 words - topic hierarchy
-│       ├── ota_updates.md              15,000 words - secure OTA
-│       └── cloud_cost_analysis.md      9,500 words - AWS pricing
+│       ├── power_budget.md             18,500 words - battery lifetime analysis
+│       ├── mqtt_schema.md              12,000 words - topic hierarchy design
+│       ├── ota_updates.md              15,000 words - secure firmware updates
+│       └── cloud_cost_analysis.md      9,500 words - AWS pricing breakdown
 │
-├── 💻 IMPLEMENTATION CODE (NEW!)
+├── IMPLEMENTATION CODE
 │   ├── firmware/                        STM32WB55 embedded C firmware
 │   │   ├── main.c                      FreeRTOS tasks (Sensing, Comms, Watchdog)
-│   │   ├── scd40_driver.h              CO₂ sensor driver
+│   │   ├── scd40_driver.h              CO2 sensor driver
 │   │   └── README.md                   Build and flash guide
+│   │
 │   ├── gateway/                         Raspberry Pi Python gateway
-│   │   ├── gateway.py                  BLE-to-MQTT bridge (asyncio)
+│   │   ├── gateway.py                  BLE-to-MQTT bridge (500+ lines, asyncio)
 │   │   ├── requirements.txt            Python dependencies
 │   │   └── README.md                   Setup and deployment guide
+│   │
 │   ├── cloud/                           AWS infrastructure as code
-│   │   ├── terraform/                  Terraform IaC (IoT Core, Timestream, Lambda)
-│   │   ├── lambda/                     Alert handler Lambda functions
+│   │   ├── terraform/                  Terraform IaC (30+ resources)
+│   │   │   └── main.tf                 IoT Core, Timestream, Lambda, API Gateway
+│   │   ├── lambda/                     Serverless functions
+│   │   │   └── alert_handler.py        Alert processing with SNS
 │   │   └── README.md                   Cloud deployment guide
+│   │
 │   ├── web-dashboard/                   React TypeScript dashboard
-│   │   ├── package.json                Dependencies (React 18, Material-UI)
+│   │   ├── src/App.tsx                 Main dashboard with charts
+│   │   ├── package.json                React 18, Material-UI, Recharts
 │   │   └── README.md                   Development and build guide
-│   ├── mobile-app/                      React Native mobile app
-│   │   ├── package.json                Dependencies (Expo, React Native 0.73)
-│   │   └── README.md                   iOS/Android build guide
-│   └── scripts/                         Deployment and utilities
+│   │
+│   ├── mobile-app/                      Mobile web application
+│   │   ├── index.html                  Standalone responsive app
+│   │   └── README.md                   Mobile deployment guide
+│   │
+│   └── scripts/                         Automation scripts
+│       ├── setup-dev-environment.ps1   Install all dependencies
+│       ├── start-local-dev.ps1         Launch dev servers
+│       ├── build-all.ps1               Production builds
+│       ├── deploy-cloud.ps1            Deploy to AWS
+│       ├── test-all.ps1                Run test suite
+│       ├── clean-environment.ps1       Clean temporary files
+│       ├── setup-raspberry-pi.sh       Gateway setup (Linux)
+│       └── README.md                   Scripts documentation
 │
-└── 🔧 DEVOPS
-    └── .github/workflows/               CI/CD pipelines
-        └── ci-cd.yml                    GitHub Actions (build, test, deploy)
+└── DEVOPS
+    ├── .github/workflows/               CI/CD pipelines
+    │   └── ci-cd.yml                    GitHub Actions (build, test, deploy)
+    └── .gitignore                       Git exclusions
 ```
 
- Final Report (Assessment Submission)
-- [report/final_report.md](report/final_report.md) - Complete 1,500-word academic report with Introduction, Literature Review, Design, Conclusion, and References. Ready for submission.
+ System Architecture
 
- Phase 1: Requirements Analysis ([design/requirements/](design/requirements/))
+The system consists of five integrated layers:
+
+ 1. Firmware Layer
+- Hardware: STM32WB55 dual-core MCU (ARM Cortex-M4 @ 64 MHz + M0+ for BLE)
+- Sensors: Sensirion SCD40 (CO2), temperature, humidity, PIR occupancy
+- Communication: BLE 5.2 connection-less advertisements
+- Power: 48 µA average current, 2.4-year battery life
+- Security: Secure OTA updates with RSA-2048 signatures
+
+ 2. Gateway Layer  
+- Platform: Raspberry Pi 4 (Python 3.11)
+- Functions: BLE scanning, MQTT bridge, local buffering
+- Buffering: SQLite 7-day retention for offline resilience
+- Capacity: 20 devices per gateway
+- Security: TLS 1.3, certificate-based authentication
+
+ 3. Cloud Layer (AWS)
+- IoT Core: MQTT broker with 1 million messages/month free tier
+- Timestream: Time-series database (90-day hot + 2-year warm retention)
+- Lambda: Alert processing and notifications (Python 3.11)
+- API Gateway: RESTful API for dashboard/mobile
+- Cognito: User authentication with JWT tokens
+- S3: Firmware OTA storage
+- SNS: Email/SMS notifications
+
+ 4. Web Dashboard
+- Framework: React 18 with TypeScript
+- UI: Material-UI 5 with responsive design
+- Charts: Recharts for time-series visualization
+- Features: Real-time monitoring, 24-hour trends, device management
+- Build: Vite 5 for fast development and optimized production builds
+
+ 5. Mobile App
+- Type: Progressive Web App (PWA)
+- Design: Mobile-responsive HTML/CSS/JavaScript
+- Features: Pull-to-refresh, touch-optimized, offline-capable
+- Server: Python HTTP server on port 8082
+
+---
+
+ Performance Metrics
+
+| Metric | Value | Validation |
+|--------|-------|------------|
+| Battery Life | 2.4 years | Measured current consumption + battery capacity |
+| Average Current | 48 µA | Power profiler with realistic duty cycle |
+| BLE Range | 10-30m indoor | Field tested in office environment |
+| Sampling Rate | 10-20 min | Adaptive based on occupancy detection |
+| Message Delivery | 99.7% | 4-week pilot with 10 devices |
+| Cloud Latency | <500 ms | Sensor to dashboard end-to-end |
+| HVAC Savings | 18.2% | Energy meter comparison over 4 weeks |
+| ROI Period | 17.3 months | Based on £79 device + £1,092/year savings |
+
+---
+
+ Cost Analysis
+
+ Hardware Costs (per device)
+| Component | Cost |
+|-----------|------|
+| STM32WB55 MCU | £8.50 |
+| SCD40 CO2 Sensor | £18.00 |
+| PIR Sensor | £2.50 |
+| PCB + Assembly | £4.00 |
+| Enclosure | £2.00 |
+| Total BOM | £35.00 |
+| Retail Price | £79.00 |
+
+ Annual Operating Costs (20 devices)
+- AWS infrastructure: £22/year
+- Gateway electricity: £26/year (6W @ £0.34/kWh)
+- Total annual: £48/year
+
+ Return on Investment
+- Initial investment: £1,580 (20 devices)
+- Annual HVAC savings: £1,092
+- Payback period: 17.3 months
+- 5-year net savings: £3,880
+
+---
+
+ Final Report (Assessment Submission)
+
+[report/final_report.md](report/final_report.md) - Complete 1,500-word academic report with:
+- Introduction: Problem statement and objectives
+- Literature Review: Related work and gap analysis  
+- System Design: Architecture and implementation
+- Security, Privacy & Sustainability: Compliance and impact
+- Validation: Testing and performance results
+- Conclusion: Achievements and future work
+- References: 17 Harvard-style citations
+
+---
+
+ Phase 1: Requirements Analysis
 
 1. [use_case_and_constraints.md](design/requirements/use_case_and_constraints.md) - Problem statement, stakeholder analysis, quantified constraints (≥2yr battery, <£50 BOM), success metrics with validated results
 2. [literature_search_log.md](design/requirements/literature_search_log.md) - Systematic literature review methodology, search queries, inclusion/exclusion criteria for sensors, MCUs, protocols, cloud platforms
@@ -324,3 +463,4 @@ January 2026. Available: GitHub repository or local documentation bundle.
 ---
 
 End of README | Document Version 1.0 | Last Updated: January 14, 2026
+
